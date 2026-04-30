@@ -39,7 +39,7 @@ After the decision, a stats screen reveals how a **fictional** pool of hundreds 
 
 ## How to Use
 
-1. Download `deal-or-no-deal.html`. You only need the .html file to run the program!
+1. Download `deal-or-no-deal.html`. You only need the .html file to run the game!
 2. Open it in any modern browser
 3. Screenshare with your students or use it in class
 4. Students call out their choice — press it or pass
