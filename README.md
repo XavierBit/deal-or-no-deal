@@ -51,7 +51,7 @@ After the decision, a stats screen reveals how a **fictional** pool of hundreds 
 
 ## You can play the game online too! 
 
-Go to https://xavierbit.github.io/deal-or-no-deal/deal-or-no-deal.html to play online. 
+Go to https://xavierbit.github.io/deal-or-no-deal/deal-or-no-deal.html to play online.  
 All functions are available as changes are stored only in the browser.
 
 ---
