@@ -39,7 +39,7 @@ After the decision, a stats screen reveals how a **fictional** pool of hundreds 
 
 ## How to Use
 
-1. Download `deal-or-no-deal.html`
+1. Download `deal-or-no-deal.html`. You only need the .html file to run the program!
 2. Open it in any modern browser
 3. Screenshare with your students or use it in class
 4. Students call out their choice — press it or pass
@@ -48,6 +48,10 @@ After the decision, a stats screen reveals how a **fictional** pool of hundreds 
 7. Hit **Next question** to continue
 
 <img width="763" height="881" alt="How to use" src="https://github.com/user-attachments/assets/5dad2a1c-93c6-4945-b22f-7a83f7ec5f7e" />
+
+## You can play the game online too! 
+Go to https://xavierbit.github.io/deal-or-no-deal/deal-or-no-deal.html to play online. 
+All functions are available as changes are stored only in the browser.
 
 ---
 
