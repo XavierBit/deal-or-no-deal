@@ -1,6 +1,6 @@
 <!--
   Deal or No Deal? - Classroom Activity
-  Version: 1.1
+  Version: 1.2
   Author:  Ivo Schmid for EASY Escola de Idiomas
   License: GNU General Public License v3.0 (GPL-3.0)
 -->
@@ -44,7 +44,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* -- SCREENS -- */
@@ -501,6 +501,9 @@ body {
   gap: 0;
   justify-content: flex-start;
   align-items: center;
+  min-height: 100vh;
+  height: auto;
+  overflow-y: visible;
 }
 
 .editor-header {
@@ -530,8 +533,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow-y: auto;
-  max-height: calc(100vh - 260px);
   padding-right: 4px;
 }
 
@@ -690,6 +691,42 @@ body {
 }
 .btn-editor-reset:hover { color: var(--red-l); }
 
+.editor-info {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.editor-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+.editor-info-text {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.editor-info-text strong {
+  display: block;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+
 .editor-saved-msg {
   font-size: 0.85rem;
   font-weight: 700;
@@ -740,7 +777,7 @@ body {
 
 <div class="topbar-title">Deal or No Deal?</div>
 
-<div class="footer-credit">@EASY Escola de Idiomas &nbsp;&middot;&nbsp; v1.1</div>
+<div class="footer-credit">@EASY Escola de Idiomas &nbsp;&middot;&nbsp; v1.2</div>
 
 <!-- GAME SCREEN -->
 <div class="screen active" id="screen-game">
@@ -838,7 +875,23 @@ body {
     <span class="editor-saved-msg" id="editor-saved-msg">Saved!</span>
     <button class="btn-editor-export" onclick="exportQuestions()">Export JSON</button>
     <label class="btn-editor-import">Import JSON<input type="file" accept=".json" onchange="importQuestions(event)"></label>
-    <button class="btn-editor-reset" onclick="resetToDefaults()">Reset to defaults</button>
+  </div>
+
+  <div class="editor-info">
+    <div class="editor-info-row">
+      <div class="editor-info-text">
+        <strong>Reset progress</strong>
+        Forgets where you left off and starts the game from question 1 next time you open it. Your questions are not affected.
+      </div>
+      <button class="btn-editor-reset" onclick="resetProgress()">Reset progress</button>
+    </div>
+    <div class="editor-info-row">
+      <div class="editor-info-text">
+        <strong>Reset to defaults</strong>
+        Replaces all your current questions with the 25 built-in ones. This cannot be undone — export first if you want to keep your questions.
+      </div>
+      <button class="btn-editor-reset" onclick="resetToDefaults()">Reset to defaults</button>
+    </div>
   </div>
 </div>
 
@@ -873,6 +926,16 @@ const DEFAULT_QUESTIONS = [
 ];
 
 const STORAGE_KEY = 'wyptb_questions';
+const PROGRESS_KEY = 'wyptb_progress';
+
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, currentIndex);
+}
+
+function loadProgress() {
+  const saved = parseInt(localStorage.getItem(PROGRESS_KEY));
+  return isNaN(saved) ? 0 : saved;
+}
 
 // -- LOAD / SAVE QUESTIONS --
 function loadQuestions() {
@@ -889,7 +952,7 @@ function saveQuestions(qs) {
 
 // -- STATE --
 let QUESTIONS = loadQuestions();
-let currentIndex = 0;
+let currentIndex = loadProgress();
 let playerChoice = null;
 const statsCache = {};
 
@@ -984,13 +1047,15 @@ function showStats() {
 // -- NEXT / RESTART --
 function nextQuestion() {
   currentIndex++;
-  if (currentIndex >= QUESTIONS.length) { showScreen('screen-end'); return; }
+  if (currentIndex >= QUESTIONS.length) { localStorage.removeItem(PROGRESS_KEY); showScreen('screen-end'); return; }
+  saveProgress();
   loadQuestion();
 }
 
 function restartGame() {
   currentIndex = 0;
   playerChoice = null;
+  localStorage.removeItem(PROGRESS_KEY);
   QUESTIONS = loadQuestions();
   initStats();
   loadQuestion();
@@ -1005,6 +1070,7 @@ function openEditor() {
 function closeEditor() {
   QUESTIONS = loadQuestions();
   currentIndex = 0;
+  localStorage.removeItem(PROGRESS_KEY);
   initStats();
   loadQuestion();
 }
@@ -1069,6 +1135,15 @@ function collectEditorRows() {
     positive: row.querySelector('.ed-positive').value.trim(),
     but:      row.querySelector('.ed-but').value.trim()
   }));
+}
+
+function resetProgress() {
+  if (!confirm('Reset progress? The game will start from question 1 next time. Your questions are not affected.')) return;
+  localStorage.removeItem(PROGRESS_KEY);
+  const msg = document.getElementById('editor-saved-msg');
+  msg.textContent = 'Progress reset!';
+  msg.classList.add('visible');
+  setTimeout(() => { msg.classList.remove('visible'); msg.textContent = 'Saved!'; }, 2000);
 }
 
 function resetToDefaults() {
