@@ -1,5 +1,6 @@
 # Deal or No Deal? 🎮
 ### A Classroom Dilemma Game for English Teachers
+###### Download the .html game file from: https://github.com/XavierBit/deal-or-no-deal/releases
 
 A self-contained, single-file web app designed for online and in-person English classes for advanced levels. Display it on a shared screen (e.g. via Jitsi screenshare) or use it in your classroom and let your students wrestle with tempting deals that always come with a catch.
 
